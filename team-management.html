@@ -81,7 +81,7 @@
     <div style="display:flex;gap:8px;">
       <select id="predefinedPlayers" onchange="fillFromPredefined()" style="flex:2">
         <option value="">--Choose from list--</option>
-        <option value="Sourabh|All rounder">Sourabh (All rounder)</option>
+        <option value="Sourabh Talwar|All rounder">Sourabh Talwar (All rounder)</option>
         <option value="Manik|Bowler">Manik (Bowler)</option>
         <option value="Lokesh|All rounder">Lokesh (All rounder)</option>
         <option value="Gundeep|All rounder">Gundeep (All rounder)</option>
@@ -95,7 +95,14 @@
         <option value="Prateek|All rounder">Prateek (All rounder)</option>
       </select>
       <input type="text" id="playerName" placeholder="Player Name" style="flex:2" />
-      <input type="text" id="playerRole" placeholder="Role" style="flex:2" />
+      <select id="playerRole" style="flex:2">
+  <option value="">Select Role</option>
+  <option value="Batsman">Batsman</option>
+  <option value="Bowler">Bowler</option>
+  <option value="All Rounder">All Rounder</option>
+
+</select>
+
       <button type="button" onclick="addPlayerToList()" style="flex:1;background:#1976d2;">Add</button>
     </div>
     <div id="playerListPreview"></div>
@@ -148,14 +155,15 @@
         return;
       }
       const name = document.getElementById('playerName').value.trim();
-      const role = document.getElementById('playerRole').value.trim();
+     const role = document.getElementById('playerRole').value;
+
       if (!name || !role) {
         document.getElementById('setupMsg').textContent = "Enter both player name and role.";
         return;
       }
       setupPlayers.push({ name, role });
       document.getElementById('playerName').value = '';
-      document.getElementById('playerRole').value = '';
+      document.getElementById('playerRole').selectedIndex = 0;
       document.getElementById('predefinedPlayers').selectedIndex = 0;
       updatePlayerListPreview();
       document.getElementById('setupMsg').textContent = "";
