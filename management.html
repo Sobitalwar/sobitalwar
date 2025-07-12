@@ -9,6 +9,7 @@
     label { display: block; margin-top: 10px; }
     input[type="text"], input[type="password"] { width: 200px; }
     button { margin-top: 10px; }
+    ul { margin-top: 10px; }
   </style>
 </head>
 <body>
@@ -30,10 +31,15 @@
     <button onclick="saveCaptains()">Save Captains</button>
     <div id="captainMsg" style="color:green"></div>
 
-    <h3>Add Player for Auction</h3>
+    <h3>Add Players for Auction</h3>
     <label>Player Name: <input type="text" id="playerName"></label>
+    <label>Role: <input type="text" id="playerRole" placeholder="e.g. Batsman"></label>
     <button onclick="addPlayer()">Add Player</button>
     <div id="playerMsg" style="color:green"></div>
+    <ul id="playerList"></ul>
+
+    <button onclick="finalizeAuctionList()">Finalize Auction List</button>
+    <div id="finalizeMsg" style="color:blue"></div>
   </div>
 
   <script>
@@ -61,14 +67,32 @@
       }
     }
 
+    // Player list management
+    let players = [];
     function addPlayer() {
-      var player = document.getElementById('playerName').value;
-      if (player) {
-        localStorage.setItem('auctionPlayer', player);
+      var name = document.getElementById('playerName').value;
+      var role = document.getElementById('playerRole').value;
+      if (name && role) {
+        players.push({ name, role });
+        updatePlayerList();
         document.getElementById('playerMsg').innerText = "Player added!";
+        document.getElementById('playerName').value = '';
+        document.getElementById('playerRole').value = '';
       } else {
-        document.getElementById('playerMsg').innerText = "Please enter a player name.";
+        document.getElementById('playerMsg').innerText = "Enter both name and role.";
       }
+    }
+    function updatePlayerList() {
+      var ul = document.getElementById('playerList');
+      ul.innerHTML = players.map(p => `<li>${p.name} (${p.role})</li>`).join('');
+    }
+    function finalizeAuctionList() {
+      if (players.length === 0) {
+        document.getElementById('finalizeMsg').innerText = "Add at least one player.";
+        return;
+      }
+      localStorage.setItem('auctionPlayers', JSON.stringify(players));
+      document.getElementById('finalizeMsg').innerText = "Auction player list saved!";
     }
   </script>
 </body>
